@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Getting started example",
-  "description": "This extension shows a Google Image search result for the current page",
+  "name": "UniPAY",
+  "description": "UniPAY chrome extension, for manaing som features",
   "version": "1.0",
 
   "browser_action": {
@@ -10,16 +10,19 @@
     "default_popup": "popup.html"
   },
   "permissions": [
+    "tabs",
+    "storage",
     "activeTab",
-    "https://ajax.googleapis.com/"
+    "https://ajax.googleapis.com/",
+    "http://www.matarebeli.ge/"
   ],
   "background": {
-    "scripts": [ "eventPage.js" ],
-    "persistent": true
+    "scripts": [ "background.js" ],
+    "persistent": false
   },
   "content_scripts": [
     {      
-      "matches": ["https://www.unipay.com/*"],
+      "matches": ["https://upconsole.unipay.com/*", "https://businessonline.ge/Pages/Transactions/Documents/*"],
       "js": ["jquery.js", "contentscript.js"],
       "run_at" : "document_end"
     }
