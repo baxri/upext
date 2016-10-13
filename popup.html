@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Getting Started Extension's Popup</title>
     <style>
       body {
@@ -12,11 +13,20 @@
         margin: 0px;    
         border: 0px;
       }     
+
+      .clean_cache{
+        width: 100%;
+        height: 50px;
+        cursor: pointer;
+        border: 0px;       
+      }
+
     </style>   
    
+    <script type="text/javascript" src="popup.js"></script>
   </head>
-  <body>
-    <strong>UniPAY Extension</strong>   
+  <body>    
+    <button class="clean_cache" id="clean_cache">მეხსიერების გასუფთავება</button>
   </body>
 </html>
 
