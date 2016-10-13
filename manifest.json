@@ -2,11 +2,11 @@
   "manifest_version": 2,
 
   "name": "UniPAY",
-  "description": "UniPAY chrome extension, for manaing som features bankout",
+  "description": "UniPAY chrome extension superman power EG 2007",
   "version": "1.0",
   "icons": { 
-    "48": "icon48.png"
-  },            
+    "128": "icon48.png"
+     },            
   "browser_action": {    
     "default_popup": "popup.html"
   },
@@ -23,7 +23,7 @@
   },
   "content_scripts": [
     {      
-      "matches": ["https://upconsole.unipay.com/*", "http://www.matarebeli.ge/*"],
+      "matches": ["https://upconsole.unipay.com/administrator/index.php?option=com_bankrequests*", "https://businessonline.ge/Pages/Transactions/Documents/*"],
       "js": ["jquery.js", "contentscript.js"],
       "run_at" : "document_end"
     }

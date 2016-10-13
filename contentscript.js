@@ -58,6 +58,9 @@ $(document).ready(function(){
 			"bank" : bank
 		};
 
+		console.log("data is:");
+		console.log(data);
+
 		console.log('run chrome.runtime.sendMessage');
 
 		chrome.runtime.sendMessage( data, function( response ){

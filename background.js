@@ -5,6 +5,8 @@ var exchangeData = {};
 var _TRANSACTION_ALREADY_SYNCED_ = "ტრანზაქცია უკვე დასინქრონებულია";
 var _IBANK_TAB_NOT_FOUND_ = "შესანამისი ინტერნეტ ბანკი არ არის გახსნილი";
 
+var Ibank_BG = "https://businessonline.ge/Pages/Transactions/Documents/*";
+
 chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){	
 
 	 sendResponse("Message Received by background.js");	 
@@ -14,7 +16,7 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
            	
         	exchangeData = message;
 
-           	chrome.tabs.query( { url : "http://www.matarebeli.ge/*"}, function( tabs ){
+           	chrome.tabs.query( { url : Ibank_BG }, function( tabs ){
 			
        		/**
 			* Check if Ibank tabs is exsists and throw error
