@@ -23,7 +23,12 @@
   },
   "content_scripts": [
     {      
-      "matches": ["https://upconsole.unipay.com/administrator/index.php?option=com_bankrequests*", "https://businessonline.ge/Pages/Transactions/Documents/*"],
+      "matches": [  
+        "https://upconsole.unipay.com/administrator/index.php?option=com_bankrequests*", 
+        "https://businessonline.ge/Pages/Transactions/Documents/*",
+        "https://www.lb.ge/ibank/Secure/Payments/*",
+        "https://online.procreditbank.ge/transplat_int.aspx*"
+        ],
       "js": ["jquery.js", "contentscript.js"],
       "run_at" : "document_end"
     }

@@ -10,6 +10,28 @@ var button = document.getElementById("slider-next");
 $(document).ready(function(){
 
 	/*
+	* When bank is selected open destination window
+	*
+	*/
+
+	$('#category').change(function(){
+
+		var bank_id = $(this).val();
+
+		var data = {
+			"type" : "open_tab",
+			"bank_id" : bank_id,			
+		};
+
+		chrome.runtime.sendMessage( data, function( response ){
+			console.log(response);
+		} );
+
+		return false;
+
+	});
+
+	/*
 	* Copy from transactions list 
 	*
 	*/
@@ -105,15 +127,19 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
 					$("#TextBoxRecipientAccountNo").val(message.data.iban);
 					$("#TextBoxRecipientInn").val(message.data.passport);
            			break;
-           		case "LB":
-           			
+           		case "LB":           			
+           			$("#ddlUsersAccounts").val("15481");	
+           			$("#txtPaymentsSum").val(message.data.amount);	
+           			$("#txtPaymentsRecName").val(message.data.destination_user);	
+           			$("#txtPaymentsRecIDNr").val(message.data.passport);	
+           			$("#txtPaymentsRecAccountNr").val(message.data.iban);	
+           			$("#txtPaymentsPurposeDescr").val(message.data.description);
            			break;
-           		case "TB":
-           			
-           			break;
-           		case "VT":
-           			
-           			break;
+           		case "PC":
+           			$("#ctl00_ctl00_body_Childe_ReceiverAccount_I").val(message.data.iban);	
+           			$("#ctl00_ctl00_body_Childe_tbSum").val(message.data.amount);	
+           			$("#ctl00_ctl00_body_Childe_ASPxCallbackPanel4_tbAim_I").val(message.data.description);	
+           			break;           		
            	}	
 
         break;
