@@ -1,4 +1,4 @@
-console.log('contentscript.js loaded!');
+//console.log('contentscript.js loaded!');
 
 /*
 * Send request to the background.js
@@ -24,7 +24,7 @@ $(document).ready(function(){
 		};
 
 		chrome.runtime.sendMessage( data, function( response ){
-			console.log(response);
+			//console.log(response);
 		} );
 
 		return false;
@@ -36,7 +36,7 @@ $(document).ready(function(){
 	*
 	*/
 	$('.upext-copy').bind('click', function(){		
-		console.log('upext-copy click event');
+		//console.log('upext-copy click event');
 		sendBankInfo(); return false;		
 	});
 
@@ -57,7 +57,7 @@ $(document).ready(function(){
 
 	function sendBankInfo(){
 
-		console.log('run sendBankInfo');
+		//console.log('run sendBankInfo');
 
 		var row = $('.seletced_row');
 
@@ -80,13 +80,13 @@ $(document).ready(function(){
 			"bank" : bank
 		};
 
-		console.log("data is:");
-		console.log(data);
+		//console.log("data is:");
+		//console.log(data);
 
-		console.log('run chrome.runtime.sendMessage');
+		//console.log('run chrome.runtime.sendMessage');
 
 		chrome.runtime.sendMessage( data, function( response ){
-			console.log(response);
+			//console.log(response);
 		} );
 
 	}
@@ -116,7 +116,7 @@ chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
     switch( message.type ) {
         case "fill-data":
            	
-        	console.log( message.data );
+        	//console.log( message.data );
 
            	switch( message.data.bank ){
            		case "BG":           			

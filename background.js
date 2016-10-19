@@ -1,4 +1,4 @@
-console.log('backgound.js loaded!');
+//console.log('backgound.js loaded!');
 
 var exchangeData = {};
 
@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
 	 		var domain = "";
 	 		var domain_full = "";
 
-	 		console.log( message.bank_id );
+	 		//console.log( message.bank_id );
 
 	 		switch( message.bank_id ){
         		case '4':
@@ -53,7 +53,7 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
         			if( tabs.length == 0 ){	       				
 						chrome.tabs.create({url: domain_full}); 
 					}else{						
-						chrome.tabs.update( tabs[0].id, { active : true } ); 
+						chrome.tabs.update( tabs[0].id, { active : true, url : domain_full } ); 
 					}
 
 	 			});
@@ -88,7 +88,7 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
         			break;
         	}
 
-        	console.log( destination_website );
+        	//console.log( destination_website );
 
            	chrome.tabs.query( { url : destination_website }, function( tabs ){
 			
@@ -103,44 +103,38 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
 				}); return;	
 			}
 
-			chrome.storage.local.get( "hashes", function( result ){
+			chrome.tabs.sendMessage( tabs[0].id, { 
+				error: "",  
+				type: "fill-data", 
+				data : exchangeData 
+			}, function( responseFromContent ){ });	
+				
+					
 
-				var  hashes = result.hashes
+			//chrome.storage.local.get( "hashes", function( result ){
+
+				//var  hashes = result.hashes
 		       		
 				/**
 				* if hashed array is empty intialize new one	
 				*
 				**/
-				if ( typeof hashes == 'undefined' ){
+				/*if ( typeof hashes == 'undefined' ){
 					hashes = [];
 				}
-
-				/**
-				* Check if this hash_id already was synced
-				*
-				**/			
+					
 				var alreadySynced = hashes.indexOf( exchangeData.hash_id );			
 
 				if( alreadySynced > -1 ){
 					chrome.tabs.sendMessage( sender.tab.id, { 
 						error: exchangeData.hash_id + " " + _TRANSACTION_ALREADY_SYNCED_				
 					});	return;
-				}	
-
-				/**
-				* Add this hash_id to the array 
-				*
-				**/	
+				}					
 
 		       	hashes.push(exchangeData.hash_id);	       
 
-		       	/**
-				* Save array in local storage
-				*
-				**/	
-
 		        chrome.storage.local.set({ "hashes": hashes}, function() {         
-		          console.log( exchangeData.hash_id  + " saved in local storage" );
+		         
 		        });
 
 				chrome.tabs.sendMessage( tabs[0].id, { 
@@ -148,10 +142,10 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
 					type: "fill-data", 
 					data : exchangeData 
 				}, function( responseFromContent ){
-					console.log("Message Sent to Destination Content");
-				});				
+					//console.log("Message Sent to Destination Content");
+				});	*/			
 
-		    });
+		    //});
 			
 			
 		} );		  
@@ -160,7 +154,7 @@ chrome.runtime.onMessage.addListener( function( message, sender, sendResponse ){
         case "clean_cache":
            	
            	chrome.storage.local.clear(function(){
-           		console.log("ლოკალური მეხსიერება გასუფთავებულია");
+           		//console.log("ლოკალური მეხსიერება გასუფთავებულია");
            	});	
 
         	break;

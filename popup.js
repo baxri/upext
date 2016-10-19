@@ -1,4 +1,4 @@
-console.log('popup.js loaded!');
+//console.log('popup.js loaded!');
 
 
 window.onload = function() {
