@@ -63,20 +63,13 @@ chrome.runtime.onConnect.addListener(function(port) {
 	        	exchangeData = message;
 	        	var destination_website = "";
 
-	        	switch( message.bank ){
-	        		case "BG":
-	        			destination_website = Ibank_BG;
-	        			break;
-	        		case "LB":
-	        			destination_website = Ibank_LB;
-	        			break;
-	        		case "PC":
-	        			destination_website = Ibank_PC;
-	        			break;
-	        		default:	        			
-	        			port.postMessage({error: _BANK_NOT_SUPPORTED_}); return;        			
-	        			break;
-	        	}        	
+	        	if( message.bank == "BG" ) destination_website = Ibank_BG;
+	        	if( message.bank == "LB" ) destination_website = Ibank_LB;
+	        	if( message.bank == "PC" ) destination_website = Ibank_PC;
+
+	        	if( destination_website.length == 0 ){
+	        		port.postMessage({error: _BANK_NOT_SUPPORTED_}); return;        	
+	        	}	        	
 
 	           	chrome.tabs.query( { url : destination_website }, function( tabs ){
 
