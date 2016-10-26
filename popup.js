@@ -2,8 +2,11 @@
 
 
 window.onload = function() {
-    document.getElementById("clean_cache").onclick = function() {
-        chrome.runtime.sendMessage( { type: "clean_cache"} );
+    document.getElementById("clean_cache").onclick = function() {       
+
+        var port = chrome.runtime.connect({name: "clean_cache"});		
+		port.postMessage({});
+
         window.close();
     }
 }

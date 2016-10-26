@@ -1,63 +1,31 @@
-//console.log('contentscript.js loaded!');
+console.log('contentscript.js loaded!');
 
-/*
-* Send request to the background.js
-*
-*/
 
 var button = document.getElementById("slider-next");
 
-$(document).ready(function(){
-
-	/*
-	* When bank is selected open destination window
-	*
-	*/
+$(document).ready(function(){	
 
 	$('#category').change(function(){
 
 		var bank_id = $(this).val();
 
-		var data = {
-			"type" : "open_tab",
+		var data = {			
 			"bank_id" : bank_id,			
 		};
 
-		chrome.runtime.sendMessage( data, function( response ){
-			//console.log(response);
-		} );
-
+		var port = chrome.runtime.connect({name: "open_tab"});		
+		port.postMessage(data);
+		
 		return false;
-
 	});
+	
 
-	/*
-	* Copy from transactions list 
-	*
-	*/
-	$('.upext-copy').bind('click', function(){		
-		//console.log('upext-copy click event');
+	$('.upext-copy').bind('click', function(){				
 		sendBankInfo(); return false;		
 	});
-
-	/*
-	* Copy from process popup
-	*
-	*/
-
-	/*$('.upext-copy-popup').bind('click', function(){
-		console.log('upext-copy-popup click event');
-		sendBankInfo();			
-	});*/
-
-	/*
-	* Function for sending info to Ibank page
-	*
-	*/
+	
 
 	function sendBankInfo(){
-
-		//console.log('run sendBankInfo');
 
 		var row = $('.seletced_row');
 
@@ -69,8 +37,7 @@ $(document).ready(function(){
 		var description = row.find('.description').text();		
 		var bank = iban.substr(4, 2);
 
-		var data = {
-			"type" : "sync",
+		var data = {			
 			"hash_id" : hash_id,
 			"iban" : iban,
 			"passport" : passport,
@@ -79,71 +46,57 @@ $(document).ready(function(){
 			"description" : description,
 			"bank" : bank
 		};
+		
+		var port = chrome.runtime.connect({name: "sync"});		
+		port.postMessage(data);
 
-		//console.log("data is:");
-		//console.log(data);
-
-		//console.log('run chrome.runtime.sendMessage');
-
-		chrome.runtime.sendMessage( data, function( response ){
-			//console.log(response);
-		} );
-
+		port.onMessage.addListener(function(msg) {		  
+			if( msg.error.length > 0 ){
+				alert(msg.error);
+			}
+		});
 	}
 
-
-});
-
-/*
-* get error and show notification
-*
-*/
-
-chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {
-   if( message.error.length > 0 ){
-   		alert(message.error);
-   }
 });
 
 
-/*
-* get message from the background.js
-*
-*/
+chrome.runtime.onConnect.addListener(function( port ){
 
-chrome.extension.onMessage.addListener(function(message, sender, sendResponse) {    		
+	port.onMessage.addListener(function(message){
 
-    switch( message.type ) {
-        case "fill-data":
-           	
-        	//console.log( message.data );
+		switch( port.name ) {
+	        case "fill_destination_form":
 
-           	switch( message.data.bank ){
-           		case "BG":           			
-           			$("#TextBoxAmount").val(message.data.amount);
-					$("#TextBoxCcy").val("GEL");				    
-				    $("#ContentPlaceHolderMain_ContentPlaceHolderDocument_TransferWithinBogUserControl_TextBoxComment").val(message.data.description);				   
-			    	$("#TextBoxRecipientName").val(message.data.destination_user);
-					$("#TextBoxRecipientAccountNo").val(message.data.iban);
-					$("#TextBoxRecipientInn").val(message.data.passport);
-           			break;
-           		case "LB":           			
-           			$("#ddlUsersAccounts").val("15481");	
-           			$("#txtPaymentsSum").val(message.data.amount);	
-           			$("#txtPaymentsRecName").val(message.data.destination_user);	
-           			$("#txtPaymentsRecIDNr").val(message.data.passport);	
-           			$("#txtPaymentsRecAccountNr").val(message.data.iban);	
-           			$("#txtPaymentsPurposeDescr").val(message.data.description);
-           			break;
-           		case "PC":
-           			$("#ctl00_ctl00_body_Childe_ReceiverAccount_I").val(message.data.iban);	
-           			$("#ctl00_ctl00_body_Childe_tbSum").val(message.data.amount);	
-           			$("#ctl00_ctl00_body_Childe_ASPxCallbackPanel4_tbAim_I").val(message.data.description);	
-           			break;           		
-           	}	
+	           	switch( message.bank ){
+	           		case "BG":           			
+	           			$("#TextBoxAmount").val(message.amount);
+						$("#TextBoxCcy").val("GEL");				    
+					    $("#ContentPlaceHolderMain_ContentPlaceHolderDocument_TransferWithinBogUserControl_TextBoxComment").val(message.description);				   
+				    	$("#TextBoxRecipientName").val(message.destination_user);
+						$("#TextBoxRecipientAccountNo").val(message.iban);
+						$("#TextBoxRecipientInn").val(message.passport);
+	           			break;
+	           		case "LB":           			
+	           			$("#ddlUsersAccounts").val("15481");	
+	           			$("#txtPaymentsSum").val(message.amount);	
+	           			$("#txtPaymentsRecName").val(message.destination_user);	
+	           			$("#txtPaymentsRecIDNr").val(message.passport);	
+	           			$("#txtPaymentsRecAccountNr").val(message.iban);	
+	           			$("#txtPaymentsPurposeDescr").val(message.description);
+	           			break;
+	           		case "PC":
+	           			$("#ctl00_ctl00_body_Childe_ReceiverAccount_I").val(message.iban);	
+	           			$("#ctl00_ctl00_body_Childe_tbSum").val(message.amount);	
+	           			$("#ctl00_ctl00_body_Childe_ASPxCallbackPanel4_tbAim_I").val(message.description);	
+	           			break;   
+	           		default:
+	           			
+	           			break;        		
+	           	}	
 
-        break;
-    }
+	        break;
+	    }
+
+	});
+
 });
-
-
