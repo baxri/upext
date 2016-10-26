@@ -67,14 +67,23 @@ chrome.runtime.onConnect.addListener(function(port) {
 	        	if( message.bank == "LB" ) destination_website = Ibank_LB;
 	        	if( message.bank == "PC" ) destination_website = Ibank_PC;
 
+	        	//destination_website = Ibank_LB_domain;
+
 	        	if( destination_website.length == 0 ){
 	        		port.postMessage({error: _BANK_NOT_SUPPORTED_}); return;        	
 	        	}	        	
 
+	        	console.log(destination_website);
+
 	           	chrome.tabs.query( { url : destination_website }, function( tabs ){
 
-		           	if( tabs.length == 0 )
-		           		port.postMessage({error: _IBANK_TAB_NOT_FOUND_}); return;					
+	           		console.log(tabs);
+
+		           	if( tabs.length == 0 ){
+		           		port.postMessage({error: _IBANK_TAB_NOT_FOUND_}); return;			
+		           	}		           				
+
+		           	console.log("fill_destination_form");
 
 					var destination_port = chrome.tabs.connect( tabs[0].id, {name: "fill_destination_form"} );	
 					destination_port.postMessage( exchangeData );			

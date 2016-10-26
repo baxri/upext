@@ -64,6 +64,8 @@ chrome.runtime.onConnect.addListener(function( port ){
 
 	port.onMessage.addListener(function(message){
 
+		console.log(message);
+
 		switch( port.name ) {
 	        case "fill_destination_form":
 
